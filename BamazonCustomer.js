@@ -38,5 +38,40 @@ var displayProducts = function() {
       for (var i = 0; i < res.length; i++) {
           console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].productDepartment + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
       }
+      shoppingCart();
+    })
+};
+
+var shoppingCart = function() {
+    inquirer.prompt([{
+        name: "ProductID",
+        type: "input",
+        message: "What is the ID of the product you would like to buy?",
+        validate: function(value) {
+            if (isNaN(value) == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }, {
+        name: "Quantity",
+        type: "input",
+        message: "How many would you like to buy?",
+        validate: function(value) {
+            if (isNaN(value) == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }]).then(function(answer) {
+        var query = 'SELECT * FROM Products WHERE id=?';
+        connection.query(query, [answer.ProductID, answer.Quantity], function(err, res) {
+            for (var i = 0; i < res.length; i++) {
+                console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Artist: " + res[i].artist + " || Year: " + res[i].year);
+            }
+            runSearch();
+        })
     })
 };
