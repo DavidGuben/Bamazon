@@ -16,11 +16,22 @@ connection.connect(function(err) {
 
 
 var displayProducts = function() {
-  var query = 'SELECT * FROM Bamazon';
+  var query = 'SELECT * FROM Products';
   connection.query(query, function(err, res) {
       for (var i = 0; i < res.length; i++) {
           console.log(res[i]);
       }
-
+runSearch();
   })
+};
+
+
+var multiSearch = function() {
+    var query = 'SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1';
+    connection.query(query, function(err, res) {
+        for (var i = 0; i < res.length; i++) {
+            console.log(res[i].artist);
+        }
+        runSearch();
+    })
 };
