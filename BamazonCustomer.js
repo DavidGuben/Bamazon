@@ -32,6 +32,7 @@ connection.connect(function(err) {
 
 // Main function which is where the user starts
 var runSearch = function() {
+  displayProducts();
     inquirer.prompt({
       // Name of this prompt
         name: "action",
@@ -62,6 +63,15 @@ var runSearch = function() {
         }
     })
 };
+
+var displayProducts = function() {
+  var query = 'SELECT * FROM Bamazon WHERE ?'
+  connection.query(query, {artist: answer.artist}, function(err, res) {
+      for (var i = 0; i < res.length; i++) {
+          console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
+      }
+      runSearch();
+}
 
 var artistSearch = function() {
     inquirer.prompt({
