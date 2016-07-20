@@ -1,17 +1,4 @@
-
-	//* First Display All of the Items available for sale. This initial display, should include the ids, names, and prices of products for sale
-
-  // * Users should then be prompted with two messages. The first message should ask them the ID of the product they would like to buy. The second message should ask them how many of the product they would like to buy.
-
-	// * Once the customer has placed the order: Your application should...
-
-	  // *
-		// * Check if your store has enough quantity of the product to meet the customer's request.
-    //   If not, you should respond to the user by saying: "Insufficient quantity" and prevent the order from going through.
-    // * If your store DOES have enough of the product to meet the customer's request, you should fulfill their order.
-    //   This means that you should show them the total cost of their puchase. Then update the SQL database to reflect the remaining quantity.
-
-
+// Required npm packages
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 
@@ -24,14 +11,13 @@ var connection = mysql.createConnection({
     database: "bamazon"
 })
 
-// Connect to the database and create a function that runs the "runSearch()" function which contains all the prompt sequences
+// Connect to the database and create a function that runs the "displayProducts()" function which contains all the products organized in a table
 connection.connect(function(err) {
     if (err) throw err;
     displayProducts();
 })
 
-
-
+// * -- First Display All of the Items available for sale. This initial display, should include the ids, names, and prices of products for sale --
 var displayProducts = function() {
   var query = 'SELECT * FROM Products'
   connection.query(query, function(err, res) {
@@ -41,12 +27,13 @@ var displayProducts = function() {
       shoppingCart();
     })
 };
-
+// * -- Users should then be prompted with two messages: The first message should ask them the ID of the product they would like to buy, the second message should ask them how many of the product they would like to buy --
 var shoppingCart = function() {
     inquirer.prompt([{
         name: "ProductID",
         type: "input",
         message: "What is the ID of the product you would like to buy?",
+        //Validate: checks weather or not the user typed a response
         validate: function(value) {
             if (isNaN(value) == false) {
                 return true;
@@ -66,12 +53,17 @@ var shoppingCart = function() {
             }
         }
     }]).then(function(answer) {
-        var query = 'SELECT * FROM Products WHERE id=?';
-        connection.query(query, [answer.ProductID, answer.Quantity], function(err, res) {
+      // * -- Once the customer has placed the order: Your application should...
+          // * Check if your store has enough quantity of the product to meet the customer's request.
+          //   If not, you should respond to the user by saying: "Insufficient quantity" and prevent the order from going through.
+          // * If your store DOES have enough of the product to meet the customer's request, you should fulfill their order.
+          //   This means that you should show them the total cost of their puchase. Then update the SQL database to reflect the remaining quantity. --
+        var query = 'SELECT * FROM Products WHERE id='+ userChoice + '';
+        connection.query(query, function(err, res) {
             for (var i = 0; i < res.length; i++) {
-                console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Artist: " + res[i].artist + " || Year: " + res[i].year);
+                console.log(res.);
             }
-            runSearch();
+            displayProducts();
         })
     })
 };
