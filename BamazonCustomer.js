@@ -67,6 +67,17 @@ var shoppingCart = function() {
             for (var i = 0; i < res.length; i++) {
                 console.log("We currently have " + res[i].stockQuantity + " " + res[i].productName + ".");
                 console.log("Thank you for your patronage! Your order of "+ res[i].stockQuantity + " " + res[i].productName + " is now being processed.");
+
+                connection.query("UPDATE Products SET ?", {
+                    item-quantity: res.stockQuantity - answer.stockQuantity
+                }, function(err, res) {
+                    console.log("Your auction was created successfully!");
+                    start();
+                });
+
+
+
+
               }
             } else {
               console.log("Not enough of this product in stock.");
