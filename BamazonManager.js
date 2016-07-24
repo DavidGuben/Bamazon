@@ -57,14 +57,20 @@
               break;
           }
   });
-
-  var viewProducts = function() {
-    var query = 'SELECT * FROM Products';
-    connection.query(query, function(err, res) {
-        for (var i = 0; i < res.length; i++) {
-            console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].productDepartment + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
-        }
-        start();
-      })
-  };
 }
+
+var viewProducts = function() {
+  var query = 'SELECT * FROM Products';
+  connection.query(query, function(err, res) {
+    for (var i = 0; i < res.length; i++) {
+        console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].productDepartment + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
+      }
+      start();
+    })
+};
+
+var viewLowInv = function() {}
+
+var addToInv = function() {}
+
+var addNewProduct = function() {}
