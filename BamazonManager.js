@@ -27,6 +27,7 @@
       start();
   })
 
+
   var start = function() {
       inquirer.prompt({
           name: "Welcome",
@@ -59,18 +60,63 @@
   });
 }
 
+var altStart = function() {
+  inquirer.prompt({
+      name: "Welcome",
+      type: "rawlist",
+      message: "What next?",
+      choices: [
+        "Reset",
+        "View Products For Sale",
+        "View Low Inventory",
+        "Add To Inventory",
+        "Add New Product"
+        ]
+  }).then(function(answer) {
+      switch(answer.Welcome) {
+        case 'Reset':
+            start();
+        break;
+          case 'View Products For Sale':
+              viewProducts();
+          break;
+
+          case 'View Low Inventory':
+              viewLowInv();
+          break;
+
+          case 'Add To Inventory':
+              addToInv();
+          break;
+
+          case 'Add New Product':
+              addNewProduct();
+          break;
+      }
+});
+};
+
 var viewProducts = function() {
   var query = 'SELECT * FROM Products';
   connection.query(query, function(err, res) {
     for (var i = 0; i < res.length; i++) {
         console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].productDepartment + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
       }
-      start();
+      altStart();
     })
 };
 
-var viewLowInv = function() {}
+var viewLowInv = function() {
+  var query = 'SELECT * FROM Products ORDER BY stockQuantity ASC LIMIT 5';
+  connection.query(query, function(err, res){
+    console.log("Low Inventory List:");
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i].productName + ": " + res[i].stockQuantity);
+    }
+    altStart();
+  })
+};
 
-var addToInv = function() {}
+var addToInv = function() {};
 
-var addNewProduct = function() {}
+var addNewProduct = function() {};
