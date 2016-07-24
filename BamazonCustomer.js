@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "password",
-    database: "bamazon"
+    database: "Bamazon"
 })
 
 // Connect to the database and create a function that runs the "displayProducts()" function which contains all the products organized in a table
@@ -64,7 +64,7 @@ var shoppingCart = function() {
               // * If your store DOES have enough of the product to meet the customer's request, you should fulfill their order.
                 console.log("We currently have " + res[i].stockQuantity + " " + res[i].productName + ".");
                 console.log("Thank you for your patronage! Your order of "+ res[i].stockQuantity + " " + res[i].productName + " is now being processed.");
-                orderProduct();
+                //orderProduct();
               }
             } else {
               // * If not, you should respond to the user by saying: "Insufficient quantity" and prevent the order from going through.
@@ -74,3 +74,7 @@ var shoppingCart = function() {
         })
     })
 };
+
+//function orderProduct() {
+
+//}

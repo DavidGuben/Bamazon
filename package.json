@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "inquirer": "^1.1.2",
+    "mysql": "^2.11.1",
     "prompt": "^0.2.14"
   },
   "repository": {
