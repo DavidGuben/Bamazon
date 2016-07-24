@@ -56,7 +56,7 @@ var shoppingCart = function() {
         }
         // * -- Once the customer has placed the order: Your application THEN should...
     }]).then(function(answer) {
-        var query = 'SELECT * FROM Products WHERE itemID=' + answer.Quantity;
+        var query = 'SELECT * FROM Products WHERE itemID=' + answer.ProductID;
         connection.query(query, function(err, res) {
           if (answer.Quantity <= res) {
             // * Check if your store has enough quantity of the product to meet the customer's request.
@@ -64,7 +64,9 @@ var shoppingCart = function() {
               // * If your store DOES have enough of the product to meet the customer's request, you should fulfill their order.
                 console.log("We currently have " + res[i].stockQuantity + " " + res[i].productName + ".");
                 console.log("Thank you for your patronage! Your order of "+ res[i].stockQuantity + " " + res[i].productName + " is now being processed.");
-                //orderProduct();
+                connection.query("UPDATE Products SET ? WHERE itemID="+ answer.ProductID, {
+                  stockQuantity: res[i].stockQuantity - answer.Quantity
+                });
               }
             } else {
               // * If not, you should respond to the user by saying: "Insufficient quantity" and prevent the order from going through.
@@ -74,7 +76,3 @@ var shoppingCart = function() {
         })
     })
 };
-
-//function orderProduct() {
-
-//}
