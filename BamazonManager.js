@@ -75,7 +75,7 @@ var altStart = function() {
   }).then(function(answer) {
       switch(answer.Welcome) {
         case 'Reset':
-            start();
+              start();
         break;
           case 'View Products For Sale':
               viewProducts();
@@ -117,6 +117,32 @@ var viewLowInv = function() {
   })
 };
 
-var addToInv = function() {};
+var addToInv = function() {
+  // If a manager selects option 3 it should provide the manager with the ability to "add more" of any item currently in the store.
+  inquirer.prompt([{
+      name: "product",
+      type: "input",
+      message: "What is the product you would like to add to the store?"
+  }, {
+      name: "stock-quantity",
+      type: "input",
+      message: "How much would you like to add to the store?",
+      validate: function(value) {
+          if (isNaN(value) == false) {
+              return true;
+          } else {
+              return false;
+          }
+      }
+  }]).then(function(answer) {
+      connection.query("INSERT INTO Products SET ?", {
+          productName: answer.product,
+          stockQuantity: answer.category
+      }, function(err, res) {
+          console.log("Your auction was created successfully!");
+          start();
+      });
+  })
+};
 
 var addNewProduct = function() {};
