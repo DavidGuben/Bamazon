@@ -1,13 +1,3 @@
-
-	//	* List a set of menu options: 1) View Products for Sale 2) View Low Inventory 3) Add to Inventory 4) Add New Product
-
-	//	* If a manager selectis option 1 it should list all of the products available for sale: the item IDs, names, prices, and quantities.
-
-	//	* If a manager selects option 2 it should list all items for which the quantity available in stores is less than 5.
-
-	//	* If a manager selects option 3 it should provide the manager with the ability to "add more" of any item currently in the store.
-
-	//	* If a manager selects option 4 it should provide the manager with the ability to add a completely new product to the store.
   // Required npm packages for this project
   var mysql = require('mysql');
   var inquirer = require('inquirer');
@@ -60,6 +50,7 @@
   });
 }
 
+// View products in the store
 var viewProducts = function() {
   var query = 'SELECT * FROM Products';
   connection.query(query, function(err, res) {
@@ -70,6 +61,7 @@ var viewProducts = function() {
     })
 };
 
+// View the 5 items with the lowest inventory
 var viewLowInv = function() {
   var query = 'SELECT * FROM Products ORDER BY stockQuantity ASC LIMIT 5';
   connection.query(query, function(err, res){
@@ -81,8 +73,8 @@ var viewLowInv = function() {
   })
 };
 
+// Add product quantity to inventory
 var addToInv = function() {
-  // If a manager selects option 3 it should provide the manager with the ability to "add more" of any item currently in the store.
   inquirer.prompt([{
       name: "product",
       type: "input",
@@ -100,17 +92,24 @@ var addToInv = function() {
       }
   }]).then(function(answer) {
         var query = 'SELECT * FROM Products WHERE itemID=' + answer.product;
-        viewProducts();
-        console.log("Product successfully added.");
         connection.query(query, function(err, res) {
           for (var i = 0; i < res.length; i++) {
+            var addInvMath = parseInt(res[i].stockQuantity) + parseInt(answer.StockQuantity);
             connection.query("UPDATE Products SET ? WHERE itemID="+ answer.product, {
-              stockQuantity: res[i].stockQuantity + answer.StockQuantity,
+              stockQuantity: addInvMath,
             });
+            // If statement checking if 1 product, multiple products or no product added
+            if(answer.StockQuantity == 1) {
+              console.log("YOU DIDN'T ADD ANY PRODUCT");
+            } else if (answer.StockQuantity == 0) {
+              console.log("SUCCESSFULY ADDDED " + answer.StockQuantity + " " + res[i].productName + " TO PRODUCT INVENTORY.");
+            } else {
+              console.log("SUCCESSFULY ADDDED " + answer.StockQuantity + " " + res[i].productName + "s TO PRODUCT INVENTORY.");
+            }
           }
           start();
         })
-})
+      })
 };
 
 var addNewProduct = function() {};
