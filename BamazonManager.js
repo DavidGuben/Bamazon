@@ -112,10 +112,7 @@ var addToInv = function() {
       })
 };
 
-<<<<<<< HEAD
-// Add new products to Products table
-var addNewProduct = function() {};
-=======
+
 var addNewProduct = function() {
   inquirer.prompt([{
     name: "addProduct",
@@ -137,7 +134,6 @@ var addNewProduct = function() {
         var query = 'SELECT * FROM Products';
         connection.query("INSERT INTO Products SET ?", { productName: answer.addProduct, stockQuantity: answer.addQuantity, departmentName: answer.addDepartment, price: answer.addPrice });
         console.log("SUCCESSFULLY ADDED PRODUCT INTO STORE.");
+        start();
   })
-  start();
 };
->>>>>>> 59a41ae3f32ccdc73407e615dc9cbcad63419e7e
