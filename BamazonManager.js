@@ -112,4 +112,27 @@ var addToInv = function() {
       })
 };
 
-var addNewProduct = function() {};
+var addNewProduct = function() {
+  inquirer.prompt([{
+    name: "addProduct",
+    type: "input",
+    message: "What is the name of the product you would like to add?"
+  }, {
+    name: "addQuantity",
+    type: "input",
+    message: "How much of this product would you like to add?"
+  }, {
+    name: "addDepartment",
+    type: "input",
+    message: "What department will this product be located in?"
+  }, {
+    name: "addPrice",
+    type: "input",
+    message: "How much will it cost?"
+  }]).then(function(answer) {
+        var query = 'SELECT * FROM Products';
+        connection.query("INSERT INTO Products SET ?", { productName: answer.addProduct, stockQuantity: answer.addQuantity, departmentName: answer.addDepartment, price: answer.addPrice });
+        console.log("SUCCESSFULLY ADDED PRODUCT INTO STORE");
+  })
+  start();
+};
