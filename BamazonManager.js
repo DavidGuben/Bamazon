@@ -132,7 +132,7 @@ var addNewProduct = function() {
   }]).then(function(answer) {
         var query = 'SELECT * FROM Products';
         connection.query("INSERT INTO Products SET ?", { productName: answer.addProduct, stockQuantity: answer.addQuantity, departmentName: answer.addDepartment, price: answer.addPrice });
-        console.log("SUCCESSFULLY ADDED PRODUCT INTO STORE");
+        console.log("SUCCESSFULLY ADDED PRODUCT INTO STORE.");
   })
   start();
 };
