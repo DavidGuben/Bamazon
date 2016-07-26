@@ -22,7 +22,7 @@ var displayProducts = function() {
   var query = 'SELECT * FROM Products'
   connection.query(query, function(err, res) {
       for (var i = 0; i < res.length; i++) {
-          console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].productDepartment + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
+          console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].departmentName + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
       }
       shoppingCart();
     })

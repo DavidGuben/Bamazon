@@ -60,49 +60,13 @@
   });
 }
 
-var altStart = function() {
-  inquirer.prompt({
-      name: "Welcome",
-      type: "rawlist",
-      message: "What next?",
-      choices: [
-        "Reset",
-        "View Products For Sale",
-        "View Low Inventory",
-        "Add To Inventory",
-        "Add New Product"
-        ]
-  }).then(function(answer) {
-      switch(answer.Welcome) {
-        case 'Reset':
-              start();
-        break;
-          case 'View Products For Sale':
-              viewProducts();
-          break;
-
-          case 'View Low Inventory':
-              viewLowInv();
-          break;
-
-          case 'Add To Inventory':
-              addToInv();
-          break;
-
-          case 'Add New Product':
-              addNewProduct();
-          break;
-      }
-});
-};
-
 var viewProducts = function() {
   var query = 'SELECT * FROM Products';
   connection.query(query, function(err, res) {
     for (var i = 0; i < res.length; i++) {
-        console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].productDepartment + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
+        console.log("Item ID: " + res[i].itemID + " || Product: " + res[i].productName + " || Department: " + res[i].departmentName + " || Price: " + res[i].price + " || Stock: " + res[i].stockQuantity);
       }
-      altStart();
+      start();
     })
 };
 
@@ -113,7 +77,7 @@ var viewLowInv = function() {
     for (var i = 0; i < res.length; i++) {
       console.log(res[i].productName + ": " + res[i].stockQuantity);
     }
-    altStart();
+    start();
   })
 };
 
@@ -122,9 +86,9 @@ var addToInv = function() {
   inquirer.prompt([{
       name: "product",
       type: "input",
-      message: "What is the product you would like to add to the store?"
+      message: "What is the ID of the product you would like to add to the store?"
   }, {
-      name: "stock-quantity",
+      name: "StockQuantity",
       type: "input",
       message: "How much would you like to add to the store?",
       validate: function(value) {
@@ -135,14 +99,18 @@ var addToInv = function() {
           }
       }
   }]).then(function(answer) {
-      connection.query("INSERT INTO Products SET ?", {
-          productName: answer.product,
-          stockQuantity: answer.category
-      }, function(err, res) {
-          console.log("Your auction was created successfully!");
+        var query = 'SELECT * FROM Products WHERE itemID=' + answer.product;
+        viewProducts();
+        console.log("Product successfully added.");
+        connection.query(query, function(err, res) {
+          for (var i = 0; i < res.length; i++) {
+            connection.query("UPDATE Products SET ? WHERE itemID="+ answer.product, {
+              stockQuantity: res[i].stockQuantity + answer.StockQuantity,
+            });
+          }
           start();
-      });
-  })
+        })
+})
 };
 
 var addNewProduct = function() {};
