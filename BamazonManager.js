@@ -112,4 +112,5 @@ var addToInv = function() {
       })
 };
 
+// Add new products to Products table
 var addNewProduct = function() {};
